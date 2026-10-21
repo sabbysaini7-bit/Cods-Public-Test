@@ -137,6 +137,27 @@ nav.links a:hover { color: var(--ink); }
 .work-meta { display: grid; gap: 4px; }
 .work-meta p { color: var(--muted); font-size: 14px; }
 .work[hidden] { display: none !important; }
+.work.featured { grid-column: 1 / -1; }
+.work.featured .cover { aspect-ratio: 21 / 8; }
+.work.featured .dial { width: 22%; margin-top: -11%; right: 10%; }
+@media (max-width: 560px) { .work.featured .cover { aspect-ratio: 16 / 9; } .work.featured .dial { width: 46%; margin-top: -23%; right: 8%; } }
+.work[aria-expanded="true"] .cover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.cover .slot.has { border-style: solid; border-color: var(--accent); color: var(--accent); }
+.dial { position: absolute; right: 8%; top: 50%; width: 46%; aspect-ratio: 1; margin-top: -23%; border-radius: 50%; border: 6px solid var(--ink); background: var(--surface); }
+.dial i { position: absolute; left: 50%; bottom: 50%; width: 4px; margin-left: -2px; border-radius: 2px; transform-origin: 50% 100%; transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
+.dial .h { height: 26%; background: var(--ink); transform: rotate(-60deg); }
+.dial .m { height: 38%; background: var(--accent); transform: rotate(40deg); }
+@media (prefers-reduced-motion: no-preference) { .work:hover .dial .h { transform: rotate(30deg); } .work:hover .dial .m { transform: rotate(400deg); } }
+.reel { grid-column: 1 / -1; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.reel-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; margin-bottom: 14px; }
+.reel-head .mono { color: var(--muted); }
+.reel ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 0 24px; counter-reset: v; }
+.reel li { counter-increment: v; border-top: 1px solid var(--line); }
+.reel a { display: flex; align-items: baseline; gap: 12px; padding-block: 11px; text-decoration: none; }
+.reel a::before { content: counter(v, decimal-leading-zero); font: 500 12px var(--mono); color: var(--accent); flex: none; }
+.reel a span { flex: 1; min-width: 0; }
+.reel a::after { content: "↗"; color: var(--muted); }
+.reel a:hover span { text-decoration: underline; text-underline-offset: 3px; }
 .note { margin-top: 18px; color: var(--muted); font-size: 14px; min-height: 1.6em; }
 
 /* Impact */
@@ -267,6 +288,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         <span class="name">Epson</span>
         <span class="name">Hindustan Unilever</span>
         <span class="name">7-Eleven</span>
+        <span class="name">Zimson</span>
         <span class="name">Ralson Tires</span>
       </div>
     </div>
@@ -286,9 +308,16 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         <button class="chip" id="f-social" data-filter="social" aria-pressed="false">YouTube &amp; social</button>
       </div>
 
-      <!-- Add each video by putting its YouTube ID in data-yt, e.g. data-yt="dQw4w9WgXcQ". -->
+      <!-- Videos for each tile live in the VIDEOS list in the script at the bottom, keyed by data-brand. -->
       <div class="grid" id="grid">
-        <button class="work" data-cat="brand" data-yt="" data-title="Lenovo">
+        <button class="work featured" data-cat="brand" data-brand="zimson" data-title="Zimson" aria-expanded="false" aria-controls="reel">
+          <div class="cover">
+            <div class="dial s2"><i class="h"></i><i class="m"></i></div>
+            <span class="label">Zimson</span><span class="slot mono">add video</span><span class="play">Play</span>
+          </div>
+          <div class="work-meta"><h3>Zimson</h3><p>Watch campaign films, reels and AI-assisted spots</p></div>
+        </button>
+        <button class="work" data-cat="brand" data-brand="lenovo" data-title="Lenovo" aria-expanded="false" aria-controls="reel">
           <div class="cover">
             <i class="shape s1" style="right:-12%;bottom:-30%;width:62%;aspect-ratio:1;border-radius:50%;background:var(--layer)"></i>
             <i class="shape s3" style="right:8%;top:42%;width:46%;height:10%;background:var(--accent)"></i>
@@ -296,7 +325,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           </div>
           <div class="work-meta"><h3>Lenovo</h3><p>Campaign motion and product videos · After Effects</p></div>
         </button>
-        <button class="work" data-cat="brand" data-yt="" data-title="Epson">
+        <button class="work" data-cat="brand" data-brand="epson" data-title="Epson" aria-expanded="false" aria-controls="reel">
           <div class="cover">
             <i class="shape s2" style="right:6%;top:18%;width:38%;aspect-ratio:1;border:10px solid var(--accent);border-radius:6px"></i>
             <i class="shape s3" style="left:0;right:0;bottom:22%;height:6%;background:var(--layer)"></i>
@@ -304,7 +333,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           </div>
           <div class="work-meta"><h3>Epson</h3><p>Product videos and animated carousels</p></div>
         </button>
-        <button class="work" data-cat="brand" data-yt="" data-title="Hindustan Unilever">
+        <button class="work" data-cat="brand" data-brand="hul" data-title="Hindustan Unilever" aria-expanded="false" aria-controls="reel">
           <div class="cover">
             <i class="shape s1" style="right:-8%;top:-24%;width:56%;aspect-ratio:1;border-radius:50%;background:var(--accent-soft);border:2px solid var(--accent)"></i>
             <i class="shape s2" style="right:22%;bottom:16%;width:20%;aspect-ratio:1;border-radius:50%;background:var(--layer)"></i>
@@ -312,7 +341,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           </div>
           <div class="work-meta"><h3>Hindustan Unilever</h3><p>Brand campaign motion to style guide</p></div>
         </button>
-        <button class="work" data-cat="brand" data-yt="" data-title="7-Eleven">
+        <button class="work" data-cat="brand" data-brand="7eleven" data-title="7-Eleven" aria-expanded="false" aria-controls="reel">
           <div class="cover">
             <i class="shape s3" style="right:0;top:30%;width:58%;height:12%;background:var(--accent)"></i>
             <i class="shape s3" style="right:0;top:48%;width:44%;height:12%;background:var(--layer)"></i>
@@ -321,7 +350,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           </div>
           <div class="work-meta"><h3>7-Eleven</h3><p>Social and campaign assets</p></div>
         </button>
-        <button class="work" data-cat="brand" data-yt="" data-title="Ralson Tires">
+        <button class="work" data-cat="brand" data-brand="ralson" data-title="Ralson Tires" aria-expanded="false" aria-controls="reel">
           <div class="cover">
             <i class="shape s2" style="right:-6%;bottom:-36%;width:64%;aspect-ratio:1;border-radius:50%;border:16px dashed var(--ink)"></i>
             <i class="shape s1" style="right:16%;top:20%;width:14%;aspect-ratio:1;border-radius:50%;background:var(--accent)"></i>
@@ -329,7 +358,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           </div>
           <div class="work-meta"><h3>Ralson Tires</h3><p>Product motion and ad creatives</p></div>
         </button>
-        <button class="work" data-cat="social" data-yt="" data-title="Seekamentor">
+        <button class="work" data-cat="social" data-brand="seekamentor" data-title="Seekamentor" aria-expanded="false" aria-controls="reel">
           <div class="cover">
             <i class="shape s2" style="right:10%;top:16%;width:22%;height:62%;border-radius:10px;border:3px solid var(--ink)"></i>
             <i class="shape s1" style="right:38%;top:30%;width:22%;height:48%;border-radius:10px;background:var(--layer-soft);border:3px solid var(--layer)"></i>
@@ -337,6 +366,10 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           </div>
           <div class="work-meta"><h3>Seekamentor</h3><p>YouTube long and short form, Instagram reels system</p></div>
         </button>
+      </div>
+      <div class="reel" id="reel" hidden>
+        <div class="reel-head"><h3 id="reel-title"></h3><span class="mono" id="reel-count"></span></div>
+        <ol id="reel-list"></ol>
       </div>
       <p class="note" id="note" aria-live="polite"></p>
     </div>
@@ -511,27 +544,64 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     chip.addEventListener("click", function () {
       var f = chip.dataset.filter;
       chips.forEach(function (c) { c.setAttribute("aria-pressed", c === chip ? "true" : "false"); });
-      works.forEach(function (w) { w.hidden = f !== "all" && w.dataset.cat !== f; });
+      works.forEach(function (w) { w.hidden = f !== "all" && w.dataset.cat !== f; w.setAttribute("aria-expanded", "false"); });
+      document.getElementById("reel").hidden = true;
     });
   });
 
-  // Video tiles: open YouTube when an ID is set. Nothing from YouTube loads until a click.
-  var note = document.getElementById("note");
+  // YouTube videos per brand: [video ID, title]. Nothing from YouTube loads until a visitor clicks.
+  var VIDEOS = {
+    zimson: [
+      ["mK--s9ep1Ho", "AI 2"],
+      ["vnEGVgoP-oI", "Spotlight"],
+      ["3lvsIyO0ttk", "Secret Santa"],
+      ["iP9p1b-zsRg", "Strspd"],
+      ["CuC4qRzc7sY", "Around the World"],
+      ["UXdrQ-xaUQE", "Tisso reel"],
+      ["ydBITAxQD3Q", "Flip video"],
+      ["LFLY0W8OM8M", "Clock match"],
+      ["Dvz9jNQpEG8", "Gandhi"],
+      ["K5WNZQ1ZJdE", "Multi watch"],
+      ["EE_jNI6po7Y", "Go Getter"]
+    ]
+  };
+
+  var note = document.getElementById("note"), reel = document.getElementById("reel");
+  var reelTitle = document.getElementById("reel-title"), reelCount = document.getElementById("reel-count"), reelList = document.getElementById("reel-list");
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   works.forEach(function (w) {
-    var id = w.dataset.yt;
-    if (id) {
-      w.querySelector(".slot").remove();
+    var list = VIDEOS[w.dataset.brand] || [];
+    if (list.length) {
+      var slot = w.querySelector(".slot");
+      slot.textContent = list.length + (list.length === 1 ? " video" : " videos");
+      slot.classList.add("has");
       w.querySelector(".play").textContent = "Watch";
     }
     w.addEventListener("click", function () {
-      if (id) {
-        var a = document.createElement("a");
-        a.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(id);
-        a.target = "_blank"; a.rel = "noopener";
-        document.body.appendChild(a); a.click(); a.remove();
-      } else {
-        note.textContent = w.dataset.title + ": video link not added yet.";
+      works.forEach(function (o) { o.setAttribute("aria-expanded", "false"); });
+      if (!list.length) {
+        reel.hidden = true;
+        note.textContent = w.dataset.title + ": video links not added yet.";
+        return;
       }
+      note.textContent = "";
+      w.setAttribute("aria-expanded", "true");
+      reelTitle.textContent = w.dataset.title;
+      reelCount.textContent = list.length + (list.length === 1 ? " video" : " videos") + " · opens on YouTube";
+      reelList.textContent = "";
+      list.forEach(function (v) {
+        var li = document.createElement("li"), a = document.createElement("a"), s = document.createElement("span");
+        a.href = "https://youtu.be/" + encodeURIComponent(v[0]);
+        a.target = "_blank"; a.rel = "noopener";
+        s.textContent = v[1];
+        a.appendChild(s); li.appendChild(a); reelList.appendChild(li);
+      });
+      // Open the list right under the clicked tile's row.
+      var after = w;
+      works.forEach(function (t) { if (!t.hidden && t.offsetTop === w.offsetTop && (w.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING)) after = t; });
+      after.after(reel);
+      reel.hidden = false;
+      reel.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
     });
   });
 
