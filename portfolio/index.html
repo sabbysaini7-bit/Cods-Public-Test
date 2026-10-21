@@ -1,6 +1,6 @@
 <title>Pushpdeep Singh Saini</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Motion graphics designer in New Delhi. Brand campaigns for Lenovo, Epson, Hindustan Unilever and 7-Eleven.">
+<meta name="description" content="Motion graphics designer in New Delhi. Brand campaigns for Lenovo, Epson, Hindustan Unilever, 7-Eleven and Zimson.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -16,6 +16,7 @@
   --layer: #2f62e8;
   --layer-soft: #e3e9fb;
   --accent-soft: #fbe3ea;
+  --screen: #0b0c10;
   --display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
   --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -148,16 +149,24 @@ nav.links a:hover { color: var(--ink); }
 .dial .h { height: 26%; background: var(--ink); transform: rotate(-60deg); }
 .dial .m { height: 38%; background: var(--accent); transform: rotate(40deg); }
 @media (prefers-reduced-motion: no-preference) { .work:hover .dial .h { transform: rotate(30deg); } .work:hover .dial .m { transform: rotate(400deg); } }
-.reel { grid-column: 1 / -1; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
-.reel-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; margin-bottom: 14px; }
+.reel { grid-column: 1 / -1; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 20px 28px; align-items: start; }
+.reel[hidden] { display: none !important; }
+@media (max-width: 860px) { .reel { grid-template-columns: minmax(0, 1fr); padding: 12px; } }
+.player { aspect-ratio: 16 / 9; max-width: 100%; border-radius: 10px; overflow: hidden; background: var(--screen); }
+.player iframe { display: block; width: 100%; height: 100%; border: 0; }
+.now { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; margin-top: 12px; font-weight: 600; }
+.now a { color: var(--muted); font-weight: 400; }
+.reel-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; margin-bottom: 10px; }
 .reel-head .mono { color: var(--muted); }
-.reel ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 0 24px; counter-reset: v; }
+.reel ol { list-style: none; margin: 0; padding: 0; counter-reset: v; }
 .reel li { counter-increment: v; border-top: 1px solid var(--line); }
-.reel a { display: flex; align-items: baseline; gap: 12px; padding-block: 11px; text-decoration: none; }
-.reel a::before { content: counter(v, decimal-leading-zero); font: 500 12px var(--mono); color: var(--accent); flex: none; }
-.reel a span { flex: 1; min-width: 0; }
-.reel a::after { content: "↗"; color: var(--muted); }
-.reel a:hover span { text-decoration: underline; text-underline-offset: 3px; }
+.reel ol button { display: flex; width: 100%; align-items: baseline; gap: 12px; padding: 10px 0; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.reel ol button::before { content: counter(v, decimal-leading-zero); font: 500 12px var(--mono); color: var(--muted); flex: none; }
+.reel ol button span { flex: 1; min-width: 0; }
+.reel ol button:hover span { text-decoration: underline; text-underline-offset: 3px; }
+.reel ol button[aria-current="true"] { color: var(--accent); font-weight: 600; }
+.reel ol button[aria-current="true"]::before { color: var(--accent); }
+.reel ol button[aria-current="true"]::after { content: "Playing"; font: 500 11px var(--mono); letter-spacing: 0.04em; }
 .note { margin-top: 18px; color: var(--muted); font-size: 14px; min-height: 1.6em; }
 
 /* Impact */
@@ -261,7 +270,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         <div>
           <p class="eyebrow">Motion graphics designer · New Delhi</p>
           <h1 style="margin-top:18px">Motion for brands that ship <span class="accent">every week.</span></h1>
-          <p class="lede">I design and animate campaign videos, product films and social content for Lenovo, Epson, Hindustan Unilever and 7-Eleven. 4+ years in agency production with After Effects, Cinema 4D and DaVinci Resolve, plus AI tools that make rough cuts faster.</p>
+          <p class="lede">I design and animate campaign videos, product films and social content for Lenovo, Epson, Hindustan Unilever, 7-Eleven and Zimson. 4+ years in agency production with After Effects, Cinema 4D and DaVinci Resolve, plus AI tools that make rough cuts faster.</p>
           <div class="hero-ctas">
             <a class="btn" href="#work">Watch the work</a>
             <a class="btn ghost" href="#contact">Get in touch</a>
@@ -299,7 +308,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       <div class="section-head">
         <p class="eyebrow">Selected work</p>
         <h2>Brand campaigns first.</h2>
-        <p>Product videos, animated carousels and campaign spots made at Langoor Digital, plus the YouTube and Instagram systems from Seekamentor. Each video plays on YouTube, so this page stays light on slow connections.</p>
+        <p>Product videos, animated carousels and campaign spots made at Langoor Digital, plus the YouTube and Instagram systems from Seekamentor. Videos play right here and only load when you press play, so this page stays light on slow connections.</p>
       </div>
 
       <div class="filters" role="group" aria-label="Filter projects">
@@ -368,8 +377,14 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         </button>
       </div>
       <div class="reel" id="reel" hidden>
-        <div class="reel-head"><h3 id="reel-title"></h3><span class="mono" id="reel-count"></span></div>
-        <ol id="reel-list"></ol>
+        <div>
+          <div class="player" id="player"></div>
+          <div class="now"><span id="now-title"></span><a class="mono" id="yt-link" href="#" target="_blank" rel="noopener">Not playing? Open on YouTube ↗</a></div>
+        </div>
+        <div>
+          <div class="reel-head"><h3 id="reel-title"></h3><span class="mono" id="reel-count"></span></div>
+          <ol id="reel-list"></ol>
+        </div>
       </div>
       <p class="note" id="note" aria-live="polite"></p>
     </div>
@@ -443,7 +458,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
             <h3>Motion Graphics Designer</h3>
             <p class="where">Langoor Digital Agency</p>
             <ul>
-              <li>Delivered 30+ brand campaigns for Lenovo, Epson, HUL, 7-Eleven and Ralson Tires, keeping 100% brand style guide adherence across all motion work in After Effects and Premiere Pro.</li>
+              <li>Delivered 30+ brand campaigns for Lenovo, Epson, HUL, 7-Eleven, Zimson and Ralson Tires, keeping 100% brand style guide adherence across all motion work in After Effects and Premiere Pro.</li>
               <li>Cut rough-cut production time by 40% by bringing Runway ML into the pipeline for AI-assisted video generation and quick scene prototypes.</li>
               <li>Raised visual consistency by 40% across product videos and animated carousels with reusable motion systems and template libraries shared across brands.</li>
               <li>Sped up delivery by 25% by building storyboards and animatics in pre-production, which reduced client revision rounds on corporate ad campaigns.</li>
@@ -544,16 +559,17 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     chip.addEventListener("click", function () {
       var f = chip.dataset.filter;
       chips.forEach(function (c) { c.setAttribute("aria-pressed", c === chip ? "true" : "false"); });
-      works.forEach(function (w) { w.hidden = f !== "all" && w.dataset.cat !== f; w.setAttribute("aria-expanded", "false"); });
-      document.getElementById("reel").hidden = true;
+      works.forEach(function (w) { w.hidden = f !== "all" && w.dataset.cat !== f; });
+      closeReel();
     });
   });
 
-  // YouTube videos per brand: [video ID, title]. Nothing from YouTube loads until a visitor clicks.
+  // YouTube videos per brand: [video ID, title]. The first one plays when the tile is clicked.
+  // Videos play in the page's own player and nothing from YouTube loads until a visitor clicks.
   var VIDEOS = {
     zimson: [
-      ["mK--s9ep1Ho", "AI 2"],
       ["vnEGVgoP-oI", "Spotlight"],
+      ["mK--s9ep1Ho", "AI 2"],
       ["3lvsIyO0ttk", "Secret Santa"],
       ["iP9p1b-zsRg", "Strspd"],
       ["CuC4qRzc7sY", "Around the World"],
@@ -566,9 +582,29 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     ]
   };
 
-  var note = document.getElementById("note"), reel = document.getElementById("reel");
+  var note = document.getElementById("note"), reel = document.getElementById("reel"), player = document.getElementById("player");
   var reelTitle = document.getElementById("reel-title"), reelCount = document.getElementById("reel-count"), reelList = document.getElementById("reel-list");
+  var nowTitle = document.getElementById("now-title"), ytLink = document.getElementById("yt-link");
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function closeReel() {
+    reel.hidden = true;
+    player.textContent = "";
+    works.forEach(function (o) { o.setAttribute("aria-expanded", "false"); });
+  }
+
+  function play(id, title) {
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
+    f.title = title;
+    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    f.allowFullscreen = true;
+    player.textContent = "";
+    player.appendChild(f);
+    nowTitle.textContent = title;
+    ytLink.href = "https://youtu.be/" + encodeURIComponent(id);
+    reelList.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-current", b.dataset.id === id ? "true" : "false"); });
+  }
   works.forEach(function (w) {
     var list = VIDEOS[w.dataset.brand] || [];
     if (list.length) {
@@ -578,29 +614,29 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       w.querySelector(".play").textContent = "Watch";
     }
     w.addEventListener("click", function () {
-      works.forEach(function (o) { o.setAttribute("aria-expanded", "false"); });
+      closeReel();
       if (!list.length) {
-        reel.hidden = true;
         note.textContent = w.dataset.title + ": video links not added yet.";
         return;
       }
       note.textContent = "";
       w.setAttribute("aria-expanded", "true");
       reelTitle.textContent = w.dataset.title;
-      reelCount.textContent = list.length + (list.length === 1 ? " video" : " videos") + " · opens on YouTube";
+      reelCount.textContent = list.length + (list.length === 1 ? " video" : " videos");
       reelList.textContent = "";
       list.forEach(function (v) {
-        var li = document.createElement("li"), a = document.createElement("a"), s = document.createElement("span");
-        a.href = "https://youtu.be/" + encodeURIComponent(v[0]);
-        a.target = "_blank"; a.rel = "noopener";
+        var li = document.createElement("li"), b = document.createElement("button"), s = document.createElement("span");
+        b.type = "button"; b.dataset.id = v[0];
         s.textContent = v[1];
-        a.appendChild(s); li.appendChild(a); reelList.appendChild(li);
+        b.addEventListener("click", function () { play(v[0], v[1]); });
+        b.appendChild(s); li.appendChild(b); reelList.appendChild(li);
       });
       // Open the list right under the clicked tile's row.
       var after = w;
       works.forEach(function (t) { if (!t.hidden && t.offsetTop === w.offsetTop && (w.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING)) after = t; });
       after.after(reel);
       reel.hidden = false;
+      play(list[0][0], list[0][1]);
       reel.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
     });
   });
