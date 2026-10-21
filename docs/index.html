@@ -357,13 +357,13 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           </div>
           <div class="work-meta"><h3>Ralson Tires</h3><p>Corporate film, product launches and global campaigns</p></div>
         </button>
-        <button class="work" data-cat="social" data-brand="seekamentor" data-title="Seekamentor" aria-expanded="false" aria-controls="reel">
+        <button class="work" data-cat="social" data-brand="reels" data-title="Reels" aria-expanded="false" aria-controls="reel">
           <div class="cover">
             <i class="shape s2" style="right:10%;top:16%;width:22%;height:62%;border-radius:10px;border:3px solid var(--ink)"></i>
             <i class="shape s1" style="right:38%;top:30%;width:22%;height:48%;border-radius:10px;background:var(--layer-soft);border:3px solid var(--layer)"></i>
             <span class="label">Reels</span><span class="slot mono">add video</span><span class="play">Play</span>
           </div>
-          <div class="work-meta"><h3>Seekamentor</h3><p>YouTube long and short form, Instagram reels system</p></div>
+          <div class="work-meta"><h3>Reels</h3><p>Short-form vertical videos for Instagram and YouTube</p></div>
         </button>
       </div>
       <div class="reel" id="reel" hidden>
@@ -594,6 +594,11 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       ["COlcs-4Cmyg", "50 Years: Taking India to the World"],
       ["10fWj0YXeTk", "Trusted in 70+ Countries"]
     ],
+    reels: [
+      ["drive:1wMT9RLmlsFvkIhAcRVTsisq5caSzWPI9", "Reel 1"],
+      ["drive:1gITjOr95qe1s9aEETX0Pol2Yh0p0kFtT", "Reel 2"],
+      ["drive:12nRg25Z2yDa6wxbIQkGVp_OAGNwjd_ZP", "Reel 3"]
+    ],
     "7eleven": [
       ["3eZRl6vOZBI", "Take It to Eleven"],
       ["1sLCKfePppg", "2023: A Year of Learning"],
@@ -615,20 +620,34 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     works.forEach(function (o) { o.setAttribute("aria-expanded", "false"); });
   }
 
-  // Some hosts (like the Claude preview) block YouTube players. Swap any blocked player
-  // for a message and a YouTube link so visitors never see an empty box.
+  // Video IDs are YouTube IDs, or "drive:<file ID>" for a Google Drive file shared with anyone who has the link.
+  function isDrive(id) { return id.indexOf("drive:") === 0; }
+  function embedUrl(id) {
+    return isDrive(id)
+      ? "https://drive.google.com/file/d/" + encodeURIComponent(id.slice(6)) + "/preview"
+      : "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
+  }
+  function watchUrl(id) {
+    return isDrive(id)
+      ? "https://drive.google.com/file/d/" + encodeURIComponent(id.slice(6)) + "/view"
+      : "https://youtu.be/" + encodeURIComponent(id);
+  }
+  function watchLabel(id) { return isDrive(id) ? "Open in Google Drive" : "Watch on YouTube"; }
+
+  // Some hosts (like the Claude preview) block embedded players. Swap any blocked player
+  // for a message and a link so visitors never see an empty box.
   function showBlocked(f) {
     var box = document.createElement("div"), p = document.createElement("p"), a = document.createElement("a");
     box.className = "blocked";
-    p.textContent = "This page can't play YouTube videos here.";
+    p.textContent = "This page can't play videos here.";
     a.className = "btn"; a.target = "_blank"; a.rel = "noopener";
-    a.href = "https://youtu.be/" + f.dataset.id;
-    a.textContent = "Watch on YouTube";
+    a.href = watchUrl(f.dataset.id);
+    a.textContent = watchLabel(f.dataset.id);
     box.appendChild(p); box.appendChild(a);
     f.replaceWith(box);
   }
   document.addEventListener("securitypolicyviolation", function (e) {
-    if (!/youtube/.test(e.blockedURI || "")) return;
+    if (!/youtube|drive\.google/.test(e.blockedURI || "")) return;
     document.querySelectorAll("iframe[data-id]").forEach(showBlocked);
     var hint = document.getElementById("showreel-hint");
     if (hint) hint.textContent = "Opens on YouTube";
@@ -637,14 +656,15 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   function play(id, title) {
     var f = document.createElement("iframe");
     f.dataset.id = id;
-    f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
+    f.src = embedUrl(id);
     f.title = title;
     f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     f.allowFullscreen = true;
     player.textContent = "";
     player.appendChild(f);
     nowTitle.textContent = title;
-    ytLink.href = "https://youtu.be/" + encodeURIComponent(id);
+    ytLink.href = watchUrl(id);
+    ytLink.textContent = "Not playing? " + watchLabel(id) + " ↗";
     reelList.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-current", b.dataset.id === id ? "true" : "false"); });
   }
   works.forEach(function (w) {
