@@ -151,6 +151,7 @@ nav.links a:hover { color: var(--ink); }
 .reel ol button { display: flex; width: 100%; align-items: baseline; gap: 12px; padding: 10px 0; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .reel ol button::before { content: counter(v, decimal-leading-zero); font: 500 12px var(--mono); color: var(--muted); flex: none; }
 .reel ol button span { flex: 1; min-width: 0; }
+.reel ol button small { display: block; margin-top: 2px; font-size: 13px; font-weight: 400; color: var(--muted); }
 .reel ol button:hover span { text-decoration: underline; text-underline-offset: 3px; }
 .reel ol button[aria-current="true"] { color: var(--accent); font-weight: 600; }
 .reel ol button[aria-current="true"]::before { color: var(--accent); }
@@ -553,21 +554,21 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     });
   });
 
-  // YouTube videos per brand: [video ID, title]. The first one plays when the tile is clicked.
+  // YouTube videos per brand: [video ID, title, short description]. The first one plays when the tile is clicked.
   // Videos play in the page's own player and nothing from YouTube loads until a visitor clicks.
   var VIDEOS = {
     zimson: [
-      ["vnEGVgoP-oI", "Spotlight"],
-      ["mK--s9ep1Ho", "AI 2"],
-      ["3lvsIyO0ttk", "Secret Santa"],
-      ["iP9p1b-zsRg", "Strspd"],
-      ["CuC4qRzc7sY", "Around the World"],
-      ["UXdrQ-xaUQE", "Tisso reel"],
-      ["ydBITAxQD3Q", "Flip video"],
-      ["LFLY0W8OM8M", "Clock match"],
-      ["Dvz9jNQpEG8", "Gandhi"],
-      ["K5WNZQ1ZJdE", "Multi watch"],
-      ["EE_jNI6po7Y", "Go Getter"]
+      ["vnEGVgoP-oI", "Own the Spotlight", "Layered frame reveal on a wrist shot"],
+      ["mK--s9ep1Ho", "What Does Your Watch Say About You?", "Card-style reveal of three personalities"],
+      ["3lvsIyO0ttk", "Christmas Gift Tree", "Holiday tree built from watch gift boxes"],
+      ["iP9p1b-zsRg", "Colour Strap Collection", "Leather straps fanning into a pastel line-up"],
+      ["CuC4qRzc7sY", "Around the World", "Chronograph from the northern lights to desert dunes"],
+      ["UXdrQ-xaUQE", "Tissot In-Store Reel", "Vertical presenter reel inside the store"],
+      ["ydBITAxQD3Q", "For Every Adventure", "Dive watch flipping through ski and skydive scenes"],
+      ["LFLY0W8OM8M", "Style Lookbook", "Fashion portraits styled with watches"],
+      ["Dvz9jNQpEG8", "Charkha: Gandhi Jayanti", "Line-art spinning wheel animation"],
+      ["K5WNZQ1ZJdE", "Back to School with Casio", "G-Shock, vintage and Baby-G in bold colour blocks"],
+      ["EE_jNI6po7Y", "For the Winners", "Gradient portraits for winners, rule breakers and rulers"]
     ]
   };
 
@@ -637,6 +638,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         var li = document.createElement("li"), b = document.createElement("button"), s = document.createElement("span");
         b.type = "button"; b.dataset.id = v[0];
         s.textContent = v[1];
+        if (v[2]) { var sm = document.createElement("small"); sm.textContent = v[2]; s.appendChild(sm); }
         b.addEventListener("click", function () { play(v[0], v[1]); });
         b.appendChild(s); li.appendChild(b); reelList.appendChild(li);
       });
