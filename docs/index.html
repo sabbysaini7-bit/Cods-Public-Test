@@ -97,7 +97,9 @@ nav.links a:hover { color: var(--ink); }
 .reel-poster:hover .big-play { transform: scale(1.04); }
 .blocked { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 16px; text-align: center; color: var(--muted); background: var(--screen); }
 .blocked .btn { background: var(--accent); border-color: var(--accent); color: var(--bg); }
-.showreel figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; margin-top: 12px; color: var(--muted); }
+.unmute { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--accent); background: var(--accent); color: var(--bg); font: 600 14px var(--body); letter-spacing: 0; cursor: pointer; }
+.unmute[aria-pressed="true"] { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.showreel figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; margin-top: 12px; color: var(--muted); }
 
 /* Client strip */
 .clients { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 34px; margin-top: clamp(40px, 6vw, 64px); padding-top: 22px; border-top: 1px dashed var(--line); }
@@ -722,28 +724,41 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     });
   });
 
-  // Showreel: starts muted and looping once the page has loaded (browsers only allow muted autoplay).
-  // Visitors on 2G or with data saver on, or who prefer reduced motion, get a play button instead.
+  // Showreel: starts muted and looping for every visitor once the page has loaded (browsers only
+  // allow muted autoplay). A sound button under the video talks to the YouTube player to unmute and mute.
   var SHOWREEL = "rx0il-gT530";
   var reelFrame = document.getElementById("showreel-frame"), reelHint = document.getElementById("showreel-hint");
+  var SPEAKER_OFF = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9H3z"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  var SPEAKER_ON = '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9H3z"/><path d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
   function loadShowreel(muted) {
     var f = document.createElement("iframe");
     f.dataset.id = SHOWREEL;
-    f.src = "https://www.youtube-nocookie.com/embed/" + SHOWREEL + "?autoplay=1&mute=" + (muted ? 1 : 0) + "&loop=1&playlist=" + SHOWREEL + "&rel=0&playsinline=1&modestbranding=1";
+    f.src = "https://www.youtube-nocookie.com/embed/" + SHOWREEL + "?autoplay=1&mute=" + (muted ? 1 : 0) + "&loop=1&playlist=" + SHOWREEL + "&rel=0&playsinline=1&modestbranding=1&enablejsapi=1";
     f.title = "Pushpdeep Portfolio 2026 showreel";
     f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     f.allowFullscreen = true;
+    var sound = document.createElement("button");
+    sound.type = "button";
+    sound.className = "unmute";
+    function setSound(isMuted) {
+      muted = isMuted;
+      sound.setAttribute("aria-pressed", isMuted ? "false" : "true");
+      sound.innerHTML = (isMuted ? SPEAKER_OFF : SPEAKER_ON) + "<span>" + (isMuted ? "Tap to unmute" : "Mute") + "</span>";
+    }
+    sound.addEventListener("click", function () {
+      function send(func) { f.contentWindow.postMessage(JSON.stringify({ event: "command", func: func, args: [] }), "*"); }
+      if (muted) { send("unMute"); send("playVideo"); } else { send("mute"); }
+      setSound(!muted);
+    });
     reelFrame.textContent = "";
     reelFrame.appendChild(f);
-    reelHint.textContent = muted ? "Playing muted · tap the speaker to turn sound on" : "Now playing";
+    reelHint.textContent = "";
+    reelHint.appendChild(sound);
+    setSound(muted);
   }
   document.getElementById("showreel-start").addEventListener("click", function () { loadShowreel(false); });
-  var conn = navigator.connection || {};
-  var slow = conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "");
-  if (!reduce && !slow) {
-    if (document.readyState === "complete") loadShowreel(true);
-    else addEventListener("load", function () { loadShowreel(true); });
-  }
+  if (document.readyState === "complete") loadShowreel(true);
+  else addEventListener("load", function () { loadShowreel(true); });
 
   // Career span bars, measured from Aug 2021 to this month.
   function months(s) { var d = s === "now" ? new Date() : new Date(s + "-01"); return d.getFullYear() * 12 + d.getMonth(); }
