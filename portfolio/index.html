@@ -88,6 +88,8 @@ nav.links a:hover { color: var(--ink); }
 .big-play { display: inline-flex; align-items: center; gap: 12px; padding: 14px 26px; border-radius: 999px; background: var(--accent); color: var(--bg); font: 700 clamp(18px, 2.4vw, 24px) var(--display); }
 .big-play::before { content: ""; border-left: 14px solid currentColor; border-top: 9px solid transparent; border-bottom: 9px solid transparent; }
 .reel-poster:hover .big-play { transform: scale(1.04); }
+.blocked { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 16px; text-align: center; color: var(--muted); background: var(--screen); }
+.blocked .btn { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 .showreel figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; margin-top: 12px; color: var(--muted); }
 
 /* Client strip */
@@ -131,7 +133,7 @@ nav.links a:hover { color: var(--ink); }
 .reel { grid-column: 1 / -1; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 20px 28px; align-items: start; }
 .reel[hidden] { display: none !important; }
 @media (max-width: 860px) { .reel { grid-template-columns: minmax(0, 1fr); padding: 12px; } }
-.player { aspect-ratio: 16 / 9; max-width: 100%; border-radius: 10px; overflow: hidden; background: var(--screen); }
+.player { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 10px; overflow: hidden; background: var(--screen); }
 .player iframe { display: block; width: 100%; height: 100%; border: 0; }
 .now { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; margin-top: 12px; font-weight: 600; }
 .now a { color: var(--muted); font-weight: 400; }
@@ -573,8 +575,28 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     works.forEach(function (o) { o.setAttribute("aria-expanded", "false"); });
   }
 
+  // Some hosts (like the Claude preview) block YouTube players. Swap any blocked player
+  // for a message and a YouTube link so visitors never see an empty box.
+  function showBlocked(f) {
+    var box = document.createElement("div"), p = document.createElement("p"), a = document.createElement("a");
+    box.className = "blocked";
+    p.textContent = "This page can't play YouTube videos here.";
+    a.className = "btn"; a.target = "_blank"; a.rel = "noopener";
+    a.href = "https://youtu.be/" + f.dataset.id;
+    a.textContent = "Watch on YouTube";
+    box.appendChild(p); box.appendChild(a);
+    f.replaceWith(box);
+  }
+  document.addEventListener("securitypolicyviolation", function (e) {
+    if (!/youtube/.test(e.blockedURI || "")) return;
+    document.querySelectorAll("iframe[data-id]").forEach(showBlocked);
+    var hint = document.getElementById("showreel-hint");
+    if (hint) hint.textContent = "Opens on YouTube";
+  });
+
   function play(id, title) {
     var f = document.createElement("iframe");
+    f.dataset.id = id;
     f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
     f.title = title;
     f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
@@ -627,6 +649,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   var reelFrame = document.getElementById("showreel-frame"), reelHint = document.getElementById("showreel-hint");
   function loadShowreel(muted) {
     var f = document.createElement("iframe");
+    f.dataset.id = SHOWREEL;
     f.src = "https://www.youtube-nocookie.com/embed/" + SHOWREEL + "?autoplay=1&mute=" + (muted ? 1 : 0) + "&loop=1&playlist=" + SHOWREEL + "&rel=0&playsinline=1&modestbranding=1";
     f.title = "Pushpdeep Portfolio 2026 showreel";
     f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
