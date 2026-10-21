@@ -6,34 +6,24 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: an editing timeline. The header is the playhead, sections are layers, keyframes mark the beats. */
+/* Single look on purpose: pitch black in every theme, like a viewer window. */
 :root {
-  --bg: #f2f3f6;
-  --surface: #ffffff;
-  --ink: #15171f;
-  --muted: #5a5f6e;
-  --line: #d8dbe3;
-  --accent: #d92b57;
-  --layer: #2f62e8;
-  --layer-soft: #e3e9fb;
-  --accent-soft: #fbe3ea;
-  --screen: #0b0c10;
+  color-scheme: dark;
+  --bg: #000000;
+  --surface: #0d0e12;
+  --ink: #f3f4f7;
+  --muted: #9a9fae;
+  --line: #24272f;
+  --accent: #ff4f79;
+  --layer: #6f97ff;
+  --layer-soft: #141b31;
+  --accent-soft: #2b0f18;
+  --screen: #000000;
   --display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
   --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --gutter-l: max(16px, env(safe-area-inset-left, 0px));
   --gutter-r: max(16px, env(safe-area-inset-right, 0px));
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0e1016; --surface: #161922; --ink: #eceef4; --muted: #9a9fb0; --line: #2a2e3b;
-    --accent: #ff5c82; --layer: #7099ff; --layer-soft: #1c2440; --accent-soft: #3a1823;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0e1016; --surface: #161922; --ink: #eceef4; --muted: #9a9fb0; --line: #2a2e3b;
-  --accent: #ff5c82; --layer: #7099ff; --layer-soft: #1c2440; --accent-soft: #3a1823;
-  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -79,8 +69,8 @@ nav.links a:hover { color: var(--ink); }
 
 /* Hero */
 .hero { padding-block: clamp(48px, 8vw, 88px) clamp(40px, 6vw, 64px); border-top: 0; }
-.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: end; }
-.hero h1 { font-size: clamp(44px, 7.6vw, 92px); font-weight: 800; letter-spacing: -0.035em; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px clamp(28px, 5vw, 64px); align-items: end; }
+.hero h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 800; letter-spacing: -0.035em; }
 .hero h1 .accent { color: var(--accent); }
 .hero .lede { font-size: clamp(17px, 1.7vw, 19px); color: var(--muted); max-width: 46ch; margin-top: 22px; }
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
@@ -89,27 +79,16 @@ nav.links a:hover { color: var(--ink); }
 .btn:hover { transform: translateY(-1px); }
 .meta-line { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 24px; color: var(--muted); }
 
-/* Hero timeline panel */
-.comp { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
-.comp-bar { display: flex; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--muted); }
-.ruler { position: relative; height: 22px; margin-left: 112px; border-bottom: 1px solid var(--line); background-image: repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 10%); }
-.layers { position: relative; }
-.layer-row { display: grid; grid-template-columns: 112px minmax(0, 1fr); align-items: center; height: 38px; border-bottom: 1px solid var(--line); }
-.layer-row:last-child { border-bottom: 0; }
-.layer-name { padding-left: 14px; font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.track { position: relative; height: 100%; }
-.clip { position: absolute; top: 9px; bottom: 9px; border-radius: 4px; background: var(--layer-soft); border: 1px solid color-mix(in srgb, var(--layer) 45%, transparent); }
-.kf { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; background: var(--layer); transform: rotate(45deg); }
-.kf.hot { background: var(--accent); }
-.scrub { position: absolute; top: -22px; bottom: 0; left: 112px; width: 2px; background: var(--accent); pointer-events: none; }
-.scrub::before { content: ""; position: absolute; top: 0; left: -5px; width: 12px; height: 12px; background: var(--accent); clip-path: polygon(0 0, 100% 0, 100% 55%, 50% 100%, 0 55%); }
-.comp-foot { display: flex; justify-content: space-between; padding: 10px 14px; border-top: 1px solid var(--line); color: var(--muted); }
-@media (prefers-reduced-motion: no-preference) {
-  .scrub { animation: sweep 4.8s cubic-bezier(.6,.05,.3,1) 0.3s 1 both; }
-  .kf { animation: pop 0.5s ease-out both; }
-}
-@keyframes sweep { from { left: 112px; } to { left: calc(112px + (100% - 112px) * 0.72); } }
-@keyframes pop { 0% { transform: rotate(45deg) scale(0.4); } 60% { transform: rotate(45deg) scale(1.35); } 100% { transform: rotate(45deg) scale(1); } }
+/* Showreel */
+.showreel { margin: clamp(32px, 5vw, 56px) 0 0; }
+.showreel-frame { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 14px; overflow: hidden; background: var(--screen); border: 1px solid var(--line); }
+.showreel-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.reel-poster { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 16px; border: 0; cursor: pointer; font: inherit; color: var(--ink); background: radial-gradient(ellipse at 72% 28%, var(--accent-soft), transparent 62%), var(--screen); }
+.reel-poster .mono { color: var(--muted); letter-spacing: 0.14em; }
+.big-play { display: inline-flex; align-items: center; gap: 12px; padding: 14px 26px; border-radius: 999px; background: var(--accent); color: var(--bg); font: 700 clamp(18px, 2.4vw, 24px) var(--display); }
+.big-play::before { content: ""; border-left: 14px solid currentColor; border-top: 9px solid transparent; border-bottom: 9px solid transparent; }
+.reel-poster:hover .big-play { transform: scale(1.04); }
+.showreel figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; margin-top: 12px; color: var(--muted); }
 
 /* Client strip */
 .clients { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 34px; margin-top: clamp(40px, 6vw, 64px); padding-top: 22px; border-top: 1px dashed var(--line); }
@@ -246,6 +225,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 
 @media (max-width: 860px) {
   .hero-grid { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .hero .lede { margin-top: 0; }
 }
 </style>
 
@@ -270,6 +250,8 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
         <div>
           <p class="eyebrow">Motion graphics designer · New Delhi</p>
           <h1 style="margin-top:18px">Motion for brands that ship <span class="accent">every week.</span></h1>
+        </div>
+        <div>
           <p class="lede">I design and animate campaign videos, product films and social content for Lenovo, Epson, Hindustan Unilever, 7-Eleven and Zimson. 4+ years in agency production with After Effects, Cinema 4D and DaVinci Resolve, plus AI tools that make rough cuts faster.</p>
           <div class="hero-ctas">
             <a class="btn" href="#work">Watch the work</a>
@@ -277,19 +259,17 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
           </div>
         </div>
 
-        <div class="comp" aria-label="Animated timeline illustration">
-          <div class="comp-bar mono"><span>Comp 1 · Brand_Campaign_v4</span><span>1920×1080</span></div>
-          <div class="layers">
-            <div class="ruler"></div>
-            <div class="layer-row"><span class="layer-name">Logo reveal</span><div class="track"><div class="clip" style="left:52%;right:4%"></div><i class="kf hot" style="left:56%;animation-delay:2.9s"></i><i class="kf" style="left:70%;animation-delay:3.6s"></i></div></div>
-            <div class="layer-row"><span class="layer-name">Product hero</span><div class="track"><div class="clip" style="left:18%;right:30%"></div><i class="kf" style="left:22%;animation-delay:1s"></i><i class="kf hot" style="left:40%;animation-delay:1.9s"></i><i class="kf" style="left:62%;animation-delay:2.7s"></i></div></div>
-            <div class="layer-row"><span class="layer-name">Kinetic type</span><div class="track"><div class="clip" style="left:4%;right:56%"></div><i class="kf" style="left:8%;animation-delay:0.5s"></i><i class="kf" style="left:28%;animation-delay:1.3s"></i></div></div>
-            <div class="layer-row"><span class="layer-name">Grade · Resolve</span><div class="track"><div class="clip" style="left:4%;right:4%"></div></div></div>
-            <div class="scrub"></div>
-          </div>
-          <div class="comp-foot mono"><span>30+ campaigns rendered</span><span>Style guide match: 100%</span></div>
-        </div>
       </div>
+
+      <figure class="showreel">
+        <div class="showreel-frame" id="showreel-frame">
+          <button class="reel-poster" id="showreel-start" type="button" aria-label="Play showreel">
+            <span class="mono">SHOWREEL · 2026</span>
+            <span class="big-play">Play showreel</span>
+          </button>
+        </div>
+        <figcaption class="mono"><span>Pushpdeep Portfolio 2026</span><span id="showreel-hint">Press play to watch</span></figcaption>
+      </figure>
 
       <div class="clients" aria-label="Clients">
         <span class="mono">CLIENTS</span>
@@ -640,6 +620,28 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       reel.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
     });
   });
+
+  // Showreel: starts muted and looping once the page has loaded (browsers only allow muted autoplay).
+  // Visitors on 2G or with data saver on, or who prefer reduced motion, get a play button instead.
+  var SHOWREEL = "rx0il-gT530";
+  var reelFrame = document.getElementById("showreel-frame"), reelHint = document.getElementById("showreel-hint");
+  function loadShowreel(muted) {
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + SHOWREEL + "?autoplay=1&mute=" + (muted ? 1 : 0) + "&loop=1&playlist=" + SHOWREEL + "&rel=0&playsinline=1&modestbranding=1";
+    f.title = "Pushpdeep Portfolio 2026 showreel";
+    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    f.allowFullscreen = true;
+    reelFrame.textContent = "";
+    reelFrame.appendChild(f);
+    reelHint.textContent = muted ? "Playing muted · tap the speaker to turn sound on" : "Now playing";
+  }
+  document.getElementById("showreel-start").addEventListener("click", function () { loadShowreel(false); });
+  var conn = navigator.connection || {};
+  var slow = conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "");
+  if (!reduce && !slow) {
+    if (document.readyState === "complete") loadShowreel(true);
+    else addEventListener("load", function () { loadShowreel(true); });
+  }
 
   // Career span bars, measured from Aug 2021 to this month.
   function months(s) { var d = s === "now" ? new Date() : new Date(s + "-01"); return d.getFullYear() * 12 + d.getMonth(); }
