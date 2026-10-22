@@ -639,12 +639,24 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   function embedUrl(id) {
     return isDrive(id)
       ? "https://drive.google.com/file/d/" + encodeURIComponent(id.slice(6)) + "/preview"
-      : "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
+      : "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0&playsinline=1&modestbranding=1&cc_load_policy=0&enablejsapi=1";
   }
   function watchUrl(id) {
     return isDrive(id)
       ? "https://drive.google.com/file/d/" + encodeURIComponent(id.slice(6)) + "/view"
       : "https://youtu.be/" + encodeURIComponent(id);
+  }
+  // YouTube switches auto-captions on by itself (always for muted autoplay), so keep turning the
+  // captions module off for the first seconds of playback. Visitors can still turn CC back on.
+  function hideCaptions(f) {
+    if (isDrive(f.dataset.id || "")) return;
+    f.addEventListener("load", function () {
+      var tries = 0;
+      var timer = setInterval(function () {
+        if (!f.isConnected || ++tries > 10) { clearInterval(timer); return; }
+        f.contentWindow.postMessage(JSON.stringify({ event: "command", func: "unloadModule", args: ["captions"] }), "*");
+      }, 800);
+    });
   }
   function watchLabel(id) { return isDrive(id) ? "Open in Google Drive" : "Watch on YouTube"; }
 
@@ -675,6 +687,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
     f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     f.allowFullscreen = true;
     player.textContent = "";
+    hideCaptions(f);
     player.appendChild(f);
     nowTitle.textContent = title;
     ytLink.href = watchUrl(id);
@@ -726,7 +739,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   function loadShowreel(muted) {
     var f = document.createElement("iframe");
     f.dataset.id = SHOWREEL;
-    f.src = "https://www.youtube-nocookie.com/embed/" + SHOWREEL + "?autoplay=1&mute=" + (muted ? 1 : 0) + "&loop=1&playlist=" + SHOWREEL + "&rel=0&playsinline=1&modestbranding=1&enablejsapi=1";
+    f.src = "https://www.youtube-nocookie.com/embed/" + SHOWREEL + "?autoplay=1&mute=" + (muted ? 1 : 0) + "&loop=1&playlist=" + SHOWREEL + "&rel=0&playsinline=1&modestbranding=1&cc_load_policy=0&enablejsapi=1";
     f.title = "Pushpdeep Portfolio 2026 showreel";
     f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     f.allowFullscreen = true;
@@ -744,6 +757,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       setSound(!muted);
     });
     reelFrame.textContent = "";
+    hideCaptions(f);
     reelFrame.appendChild(f);
     reelHint.textContent = "";
     reelHint.appendChild(sound);
