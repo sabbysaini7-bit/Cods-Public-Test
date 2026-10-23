@@ -1,0 +1,4 @@
+# Netlify serves the portfolio from docs/ (built by portfolio/build.sh). No build step needed.
+[build]
+  publish = "docs"
+  command = ""
